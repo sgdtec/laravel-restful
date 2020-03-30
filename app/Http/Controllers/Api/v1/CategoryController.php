@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Requests\StoreUpdateCategoryFormRequest;
 use App\Http\Controllers\Controller;
@@ -10,6 +10,7 @@ use App\Models\Category;
 class CategoryController extends Controller
 {
     private $category;
+    private $totalPage = 10;
 
     public function __construct(Category $category) {
         $this->category = $category;
@@ -60,5 +61,20 @@ class CategoryController extends Controller
 
         return response()->json($category);  
 
+    }
+
+    public function products($id) {
+        
+        $category = $this->category->find($id);
+
+        if (!$category)
+            return response()->json(['error' => 'Not Found'], 404);
+
+        $products = $category->products()->paginate($this->totalPage);
+        
+        return response()->json([
+            'category' => $category,
+            'products' => $products
+        ]);
     }
 }

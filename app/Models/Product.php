@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['name', 'description', 'image']; 
+    protected $fillable = ['category_id', 'name', 'description', 'image']; 
 
     public function getResults($data, $total) {
         if (!isset($data['filter']) && !isset($data['name']) && !isset($data['description']))
@@ -17,7 +17,7 @@ class Product extends Model
             if (isset($data['filter'])) {
                 $filter = $data['filter'];
                 $query->where('name', $filter);
-                $query->orWhere('description', 'LIKE', "%{$filter}%")
+                $query->orWhere('description', 'LIKE', "%{$filter}%");
             }
 
             if (isset($data['name']))
@@ -25,9 +25,14 @@ class Product extends Model
 
             if (isset($data['description'])) {
                 $description = $data['description'];
-                $query->where('description', 'LIKE', "%{$description}%")
+                $query->where('description', 'LIKE', "%{$description}%");
             }
 
-        })->paginate($total);   
+        })->paginate($total);
+    }
+
+    //Return Category of Product
+    public function category() {
+        return $this->belongsTo(Category::class);
     }
 }

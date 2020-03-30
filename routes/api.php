@@ -1,10 +1,11 @@
 <?php
-/**
-Route::get('categories', 'Api\CategoryController@index')->name('index');
-Route::post('categories', 'Api\CategoryController@store')->name('store');
-Route::put('categories/{id}', 'Api\CategoryController@update')->name('update');
-Route::delete('categories/{id}', 'Api\CategoryController@delete')->name('delete');
-*/
 
-Route::apiResource('categories', 'Api\CategoryController');
-Route::apiResource('products', 'Api\ProductController');
+Route::group(['prefix' => 'v1', 'namespace' => 'Api\v1'], function() {
+    Route::get('categories/{id}/products', 'CategoryController@products');
+
+    Route::apiResource('categories', 'CategoryController');
+    Route::apiResource('products', 'ProductController');
+});
+
+
+
